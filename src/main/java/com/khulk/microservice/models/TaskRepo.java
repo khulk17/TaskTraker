@@ -24,8 +24,12 @@ public class TaskRepo {
 
     public String addTask(String Description,Status status) throws IOException {
         StringBuilder builder = new StringBuilder(Description);
-        builder.deleteCharAt(0);
-        builder.deleteCharAt(builder.length()-1);
+        if (Description.charAt(0)=='"' && Description.charAt(Description.length()-1)=='"'){
+            builder.deleteCharAt(0);
+            builder.deleteCharAt(builder.length()-1);
+        }else {
+            throw  new IOException("Description contains invalid characters");
+        }
         Task task = new Task(builder.toString(), status);
         tasks.put(task.getId(),task);
         if (filewriter.WriteToFile(tasks))
